@@ -33,12 +33,12 @@ class splunk::platform::posix (
     tag     => 'splunk_forwarder',
   }
   @exec { 'enable_splunkforwarder':
-
     # The path parameter can't be set because the boot-start silently fails on systemd service providers
     command => "${splunk::params::forwarder_dir}/bin/splunk enable boot-start -user ${splunk_user}",
     creates => '/etc/init.d/splunk',
     require => Exec['license_splunkforwarder'],
     tag     => 'splunk_forwarder',
+    notify  => Service['splunk'],    
   }
 
   # Commands to run to enable full Splunk
@@ -56,6 +56,7 @@ class splunk::platform::posix (
     creates => '/etc/init.d/splunk',
     require => Exec['license_splunk'],
     tag     => 'splunk_server',
+    notify  => Service['splunk'], 
   }
 
   # Modify virtual service definitions specific to the Linux platform. These
